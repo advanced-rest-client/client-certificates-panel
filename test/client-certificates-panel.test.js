@@ -400,6 +400,7 @@ describe('<client-certificates-panel>', function() {
     beforeEach(async () => {
       element = await basicFixture();
       const items = DataGenerator.generateClientCertificates({ size: 5 });
+      await aTimeout(150);
       await untilAfterQuery(element, items);
     });
 
@@ -444,7 +445,7 @@ describe('<client-certificates-panel>', function() {
       await nextFrame();
       const node = element.shadowRoot.querySelector('[dialog-confirm]');
       MockInteractions.tap(node);
-      await aTimeout(300);
+      await aTimeout(150);
       assert.isFalse(dialog.opened, 'dialog is not opened');
       assert.isTrue(spy.called, 'delete event is dispatched');
       assert.deepEqual(spy.args[0][0].detail.models, ['client-certificates'], 'models is set');
