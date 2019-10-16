@@ -111,7 +111,7 @@ describe('<client-certificates-panel>', function() {
           datastore: 'client-certificates'
         }
       }));
-      assert.deepEqual(element.items, []);
+      assert.isUndefined(element.items);
     });
 
     it('ignores other data stores', () => {

@@ -13,6 +13,8 @@ the License.
 */
 import { LitElement, html } from 'lit-element';
 import { moreVert, exportVariant, deleteIcon } from '@advanced-rest-client/arc-icons/ArcIcons.js';
+import { ClientCertificatesConsumerMixin } from
+  '@advanced-rest-client/client-certificates-consumer-mixin/client-certificates-consumer-mixin.js';
 import '@advanced-rest-client/arc-icons/arc-icons.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
@@ -46,7 +48,7 @@ import '../certificate-details.js';
  * @memberof UiElements
  * @demo demo/index.html
  */
-export class ClientCertificatesPanel extends LitElement {
+export class ClientCertificatesPanel extends ClientCertificatesConsumerMixin(LitElement) {
   static get styles() {
     return styles;
   }
@@ -61,10 +63,6 @@ export class ClientCertificatesPanel extends LitElement {
        * Enables compatibility with Anypoint components.
        */
       compatibility: { type: Boolean },
-      // List of cookies to display
-      items: { type: Array },
-      // True when loading data from the datastore.
-      loading: { type: Boolean },
       /**
        * When set a certificate details dialog is opened.
        */
@@ -82,38 +80,9 @@ export class ClientCertificatesPanel extends LitElement {
       _exportOptions: { type: Object }
     };
   }
-  /**
-   * @return {Boolean} `true` if `items` is set and has cookies
-   */
-  get hasItems() {
-    const { items } = this;
-    return !!(items && items.length);
-  }
-  /**
-   * @return {Boolean} `true` when the lists is hidden.
-   */
-  get listHidden() {
-    const { hasItems } = this;
-    return !hasItems;
-  }
-  /**
-   * A computed flag that determines that the query to the databastore
-   * has been performed and empty result was returned.
-   * This can be true only if not in search.
-   * @return {Boolean}
-   */
-  get dataUnavailable() {
-    const { hasItems, loading } = this;
-    return !loading && !hasItems;
-  }
 
   constructor() {
     super();
-    this._dbDestroyHandler = this._dbDestroyHandler.bind(this);
-    this._dataImportHandler = this._dataImportHandler.bind(this);
-    this._certDeleteHandler = this._certDeleteHandler.bind(this);
-    this._certInsertHandler = this._certInsertHandler.bind(this);
-
     this._page = 0;
     this._exportOptions = {
       file: this._generateFileName(),
@@ -124,127 +93,15 @@ export class ClientCertificatesPanel extends LitElement {
     }
   }
 
-  connectedCallback() {
-    if (super.connectedCallback) {
-      super.connectedCallback();
-    }
-    window.addEventListener('datastore-destroyed', this._dbDestroyHandler);
-    window.addEventListener('data-imported', this._dataImportHandler);
-    window.addEventListener('client-certificate-delete', this._certDeleteHandler);
-    window.addEventListener('client-certificate-insert', this._certInsertHandler);
-  }
-
-  disconnectedCallback() {
-    if (super.disconnectedCallback) {
-      super.disconnectedCallback();
-    }
-    window.removeEventListener('datastore-destroyed', this._dbDestroyHandler);
-    window.removeEventListener('data-imported', this._dataImportHandler);
-    window.removeEventListener('client-certificate-delete', this._certDeleteHandler);
-    window.removeEventListener('client-certificate-insert', this._certInsertHandler);
-  }
-
-  firstUpdated() {
-    if (!this.items) {
-      this.reset();
-    }
-  }
-
-  _dbDestroyHandler(e) {
-    const { datastore } = e.detail;
-    if (datastore !== 'client-certificates') {
-      return;
-    }
-    this.items = [];
-  }
-
-  /**
-   * Handler for `data-imported` cutom event.
-   * Refreshes data state.
-   */
-  _dataImportHandler() {
-    this.reset();
-  }
-
-  _certDeleteHandler(e) {
-    if (e.cancelable) {
-      return;
-    }
-    const { id } = e.detail;
-    const items = this.items || [];
-    const index = items.findIndex((i) => i._id === id);
-    if (index === -1) {
-      return;
-    }
-    items.splice(index, 1);
-    this.items = [...items];
-  }
-
-  _certInsertHandler(e) {
-    if (e.cancelable) {
-      return;
-    }
-    const item = e.detail;
-    const items = this.items || [];
-    const index = items.findIndex((i) => i._id === item._id);
-    if (index === -1) {
-      items.push(item);
-    } else {
-      items[index] = item;
-    }
-    this.items = [...items];
-  }
-
-  reset() {
-    this.loading = false;
-    this.items = undefined;
-    this.queryCertificates();
-  }
   /**
    * Handles an exception by sending exception details to GA.
    * @param {String} message A message to send.
    */
   _handleException(message) {
-    const e = new CustomEvent('send-analytics', {
-     bubbles: true,
-     composed: true,
-     detail: {
-       type: 'exception',
-       description: message
-     }
-    });
-    this.dispatchEvent(e);
+    super._handleException(message);
     const toast = this.shadowRoot.querySelector('#errorToast');
     toast.text = message;
     toast.opened = true;
-  }
-
-  /**
-   * Queries application for list of cookies.
-   * It dispatches `session-cookie-list-all` cuystom event.
-   * @return {Promise} Resolved when cookies are available.
-   */
-  async queryCertificates() {
-    this.loading = true;
-    const e = new CustomEvent('client-certificate-list', {
-      detail: {},
-      cancelable: true,
-      composed: true,
-      bubbles: true
-    });
-    this.dispatchEvent(e);
-    if (!e.defaultPrevented) {
-      this.loading = false;
-      this._handleException('Certificates store not redy.');
-      return;
-    }
-    try {
-      this.items = await e.detail.result;
-    } catch (e) {
-      this.items = undefined;
-      this._handleException(e.message);
-    }
-    this.loading = false;
   }
 
   _deleteCertDetails() {
@@ -252,32 +109,6 @@ export class ClientCertificatesPanel extends LitElement {
     this.openedDetailsId = undefined;
     this.certDetailsOpened = false;
     this._delete(id);
-  }
-  /**
-   * Performs a delete action of cookie items.
-   *
-   * @param {String} id An id of the cookie to delete
-   * @return {Promise}
-   */
-  async _delete(id) {
-    const e = new CustomEvent('client-certificate-delete', {
-      detail: {
-        id
-      },
-      cancelable: true,
-      composed: true,
-      bubbles: true
-    });
-    this.dispatchEvent(e);
-    if (!e.defaultPrevented) {
-      this._handleException('Cookies model not in the DOM');
-      return;
-    }
-    try {
-      return await e.detail.result;
-    } catch (e) {
-      this._handleException(e.message);
-    }
   }
   /**
    * Handler for `accept` event dispatched by export options element.
@@ -425,27 +256,6 @@ export class ClientCertificatesPanel extends LitElement {
     }
   }
 
-  async _importCert(opts) {
-    if (!opts.name) {
-      opts.name = new Date().toGMTString();
-    }
-    const e = this.dispatchImportCert(opts);
-    await e.detail.result;
-  }
-
-  dispatchImportCert(value) {
-    const e = new CustomEvent('client-certificate-insert', {
-      bubbles: true,
-      composed: true,
-      cancelable: true,
-      detail: {
-        value
-      }
-    });
-    this.dispatchEvent(e);
-    return e;
-  }
-
   _sheetClosedHandler(e) {
     const prop = e.target.dataset.openProperty;
     this[prop] = e.detail.value;
@@ -535,8 +345,8 @@ export class ClientCertificatesPanel extends LitElement {
   }
 
   _listTemplate() {
-    const { listHidden } = this;
-    if (listHidden) {
+    const { hasItems } = this;
+    if (!hasItems) {
       return '';
     }
     const items = this.items || [];
