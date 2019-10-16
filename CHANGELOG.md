@@ -72,3 +72,7 @@
 
 
 
+## [1.0.1](https://github.com/advanced-rest-client/client-certificates-panel/compare/1.0.0...1.0.1) (2019-10-16)
+
+
+
