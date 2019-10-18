@@ -76,3 +76,12 @@
 
 
 
+## [1.0.2](https://github.com/advanced-rest-client/client-certificates-panel/compare/1.0.0...1.0.2) (2019-10-18)
+
+
+### Features
+
+* adding compatibility support ([e7b41d7](https://github.com/advanced-rest-client/client-certificates-panel/commit/e7b41d7))
+
+
+
