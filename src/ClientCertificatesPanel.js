@@ -321,7 +321,7 @@ export class ClientCertificatesPanel extends ClientCertificatesConsumerMixin(Lit
   }
 
   _unavailableTemplate() {
-    const { dataUnavailable } = this;
+    const { dataUnavailable, compatibility } = this;
     if (!dataUnavailable) {
       return '';
     }
@@ -338,6 +338,7 @@ export class ClientCertificatesPanel extends ClientCertificatesConsumerMixin(Lit
           data-action="empty-add-cert"
           @click="${this.addCertificate}"
           class="empty-add-cert"
+          ?compatibility="${compatibility}"
         >Import certificate</anypoint-button>
       </div>
     </div>
@@ -425,7 +426,8 @@ export class ClientCertificatesPanel extends ClientCertificatesConsumerMixin(Lit
     return html`<anypoint-dialog
       id="dataClearDialog"
       ?compatibility="${compatibility}"
-      @overlay-closed="${this._onClearDialogResult}">
+      @overlay-closed="${this._onClearDialogResult}"
+    >
       <div class="title">Remove all certificates?</div>
       <p>Maybe you should create a backup first?</p>
       <div class="buttons">
@@ -455,10 +457,13 @@ export class ClientCertificatesPanel extends ClientCertificatesConsumerMixin(Lit
   }
 
   _renderAddCert() {
+    const { compatibility, outlined } = this;
     return html`
     <certificate-import
       @cancel="${this._cancelImport}"
       @accept="${this._acceptImport}"
+      ?compatibility="${compatibility}"
+      ?outlined="${outlined}"
     ></certificate-import>
     `;
   }

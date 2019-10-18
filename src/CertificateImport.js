@@ -92,6 +92,11 @@ export class CertificateImport extends LitElement {
     .action-button {
       margin-top: 40px;
     }
+
+    anypoint-switch[compatibility] {
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
     `;
   }
 
@@ -181,6 +186,12 @@ export class CertificateImport extends LitElement {
     }
     this.importType = target.dataset.type;
     this._page = 1;
+  }
+
+  _importTypeClickHandler(e) {
+    if (this.compatibility) {
+      this._importTypeHandler(e);
+    }
   }
 
   cancel() {
@@ -294,11 +305,13 @@ export class CertificateImport extends LitElement {
   }
 
   _headerTemplate() {
+    const { compatibility } = this;
     return html`<div class="header">
       <h2>Import a certificate</h2>
       <anypoint-button
         emphasis="low"
         data-action="cancel-header"
+        ?compatibility="${compatibility}"
         @click="${this.cancel}"
       >Cancel</anypoint-button>
     </div>`;
@@ -308,8 +321,10 @@ export class CertificateImport extends LitElement {
     return html`<anypoint-button
       emphasis="medium"
       @transitionend="${this._importTypeHandler}"
+      @click="${this._importTypeClickHandler}"
       data-type="${type}"
       class="cert-type-option"
+      ?compatibility="${this.compatibility}"
     >
       <div class="cert-type-ico">${ico}</div>
       <div class="cert-type-wrap">
@@ -331,26 +346,35 @@ export class CertificateImport extends LitElement {
   }
 
   _certificateInput() {
+    const { compatibility } = this;
     return html`<anypoint-button
       emphasis="medium"
       @click="${this._selectCertFileHandler}"
+      ?compatibility="${compatibility}"
     >
       Select the certificate file
     </anypoint-button>`;
   }
 
   _certificateInfoTemplate(file) {
+    const { compatibility } = this;
     return html`
     ${file.name}
-    <anypoint-icon-button @click="${this._clearCertHandler}">
+    <anypoint-icon-button
+      ?compatibility="${compatibility}"
+      @click="${this._clearCertHandler}"
+    >
       <span class="icon">${deleteIcon}</span>
     </anypoint-icon-button>
     `;
   }
 
   _passwordFiledTemplate(name, label) {
+    const { compatibility, outlined } = this;
     return html`<anypoint-masked-input
       name="${name}"
+      ?compatibility="${compatibility}"
+      ?outlined="${outlined}"
       @value-changed="${this._inputHandler}"
     >
       <label slot="label">${label}</label>
@@ -358,17 +382,23 @@ export class CertificateImport extends LitElement {
   }
 
   _keyInfoTemplate(file) {
+    const { compatibility } = this;
     return html`
     ${file.name}
-    <anypoint-icon-button @click="${this._clearKeyHandler}">
+    <anypoint-icon-button
+      ?compatibility="${compatibility}"
+      @click="${this._clearKeyHandler}"
+    >
       <span class="icon">${deleteIcon}</span>
     </anypoint-icon-button>
     `;
   }
 
   _keyInput() {
+    const { compatibility } = this;
     return html`<anypoint-button
       emphasis="medium"
+      ?compatibility="${compatibility}"
       @click="${this._selectKeyFileHandler}"
     >
       Select the private key file
@@ -379,8 +409,10 @@ export class CertificateImport extends LitElement {
     if (!this.hasKeyPasswordInput) {
       return '';
     }
+    const { compatibility } = this;
     return html`<anypoint-switch
       data-type="cert"
+      ?compatibility="${compatibility}"
       @change="${this._certPassChangeHandler}"
     >Certificate has password</anypoint-switch>
     ${this._certificateHasPassword ? this._passwordFiledTemplate('_certificatePassword', 'Certificate password') : ''}`;
@@ -391,13 +423,15 @@ export class CertificateImport extends LitElement {
       return '';
     }
     const {
-      keyFile
+      keyFile,
+      compatibility
     } = this;
     return html`<div class="cert-file" data-type="key">
     ${keyFile ? this._keyInfoTemplate(keyFile) : this._keyInput()}
     </div>
     <anypoint-switch
       data-type="key"
+      ?compatibility="${compatibility}"
       @change="${this._keyPassChangeHandler}"
     >Private key has password</anypoint-switch>
     ${this._keyHasPassword ? this._passwordFiledTemplate('_keyPassword', 'Private key password') : ''}`;
@@ -407,13 +441,17 @@ export class CertificateImport extends LitElement {
     const {
       certificateFile,
       acceptDisabled,
-      loading
+      loading,
+      compatibility,
+      outlined
     } = this;
     return html`
     ${this._headerTemplate()}
 
     <anypoint-input
       name="name"
+      ?compatibility="${compatibility}"
+      ?outlined="${outlined}"
       @value-changed="${this._inputHandler}"
     >
       <label slot="label">Certificate name<label>
@@ -431,6 +469,7 @@ export class CertificateImport extends LitElement {
         data-action="accept"
         @click="${this._importHandler}"
         ?disabled="${acceptDisabled}"
+        ?compatibility="${compatibility}"
       >
         Import
       </anypoint-button>
