@@ -1,7 +1,7 @@
 {
   "name": "@advanced-rest-client/client-certificates-panel",
   "description": "A view to render list of installed client certificates.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "Apache-2.0",
   "main": "client-certificates-panel.js",
   "keywords": [
