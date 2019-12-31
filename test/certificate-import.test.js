@@ -366,6 +366,11 @@ describe('<certificate-import>', function() {
       MockInteractions.tap(button);
       assert.isTrue(spy.called);
     });
+
+    it('sets _page to 0', () => {
+      element.cancel();
+      assert.equal(element._page, 0);
+    });
   });
 
   describe('Import flow', () => {

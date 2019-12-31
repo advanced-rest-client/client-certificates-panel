@@ -138,6 +138,7 @@ export class CertificateImport extends CcConsumerMixin(LitElement) {
    */
   cancel() {
     this.dispatchEvent(new CustomEvent('close'));
+    this._page = 0;
   }
 
   /**
