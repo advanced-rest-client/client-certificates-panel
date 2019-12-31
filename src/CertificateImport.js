@@ -11,13 +11,16 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html } from 'lit-element';
+import { CcConsumerMixin } from
+  '@advanced-rest-client/client-certificates-consumer-mixin/client-certificates-consumer-mixin.js';
 import { deleteIcon } from '@advanced-rest-client/arc-icons/ArcIcons.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@anypoint-web-components/anypoint-input/anypoint-input.js';
 import '@anypoint-web-components/anypoint-input/anypoint-masked-input.js';
 import '@anypoint-web-components/anypoint-switch/anypoint-switch.js';
+import styles from './ImportStyles.js';
 /**
  * A view to import a client certificate into the application.
  *
@@ -25,79 +28,9 @@ import '@anypoint-web-components/anypoint-switch/anypoint-switch.js';
  * @memberof UiElements
  * @demo demo/index.html
  */
-export class CertificateImport extends LitElement {
+export class CertificateImport extends CcConsumerMixin(LitElement) {
   static get styles() {
-    return css`
-    :host {
-      display: block;
-    }
-
-    .header {
-      flex-direction: row;
-      display: flex;
-      align-items: center;
-    }
-
-    h2 {
-      font-size: var(--arc-font-headline-font-size);
-      font-weight: var(--arc-font-headline-font-weight);
-      letter-spacing: var(--arc-font-headline-letter-spacing);
-      line-height: var(--arc-font-headline-line-height);
-      flex: 1;
-    }
-
-    .type-options {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-top: 40px;
-    }
-
-    .cert-type-option {
-      text-transform: none;
-      margin: 12px 0;
-      color: inherit;
-      border-color: #e5e5e5;
-      width: 380px;
-      justify-content: start;
-    }
-
-    .cert-type-ico {
-      color: var(--accent-color);
-    }
-
-    .cert-type-wrap {
-      margin-left: 8px;
-    }
-
-    .cert-desc {
-      font-size: 0.85rem;
-    }
-
-    .cert-file {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-top: 40px;
-    }
-
-    .icon {
-      display: block;
-      width: 24px;
-      height: 24px;
-      fill: currentColor;
-    }
-
-    .action-button {
-      margin-top: 40px;
-    }
-
-    anypoint-switch[compatibility] {
-      margin-top: 12px;
-      margin-bottom: 12px;
-    }
-    `;
+    return styles;
   }
 
   static get properties() {
@@ -177,6 +110,11 @@ export class CertificateImport extends LitElement {
     return false;
   }
 
+  constructor() {
+    super();
+    this.noAutoQueryCertificates = true;
+  }
+
   _importTypeHandler(e) {
     const { propertyName, target } = e;
     if (propertyName !== undefined) {
@@ -194,19 +132,35 @@ export class CertificateImport extends LitElement {
     }
   }
 
+  /**
+   * Dispatches `close` custom event (non-bubbling) to
+   * inform that the parent component should hide the UI.
+   */
   cancel() {
-    this.dispatchEvent(new CustomEvent('cancel'));
+    this.dispatchEvent(new CustomEvent('close'));
   }
 
+  /**
+   * Accepts current user input and imports a certificate if fomr is valid.
+   * When ready it dispatches `close` event.
+   * When error occurrs it dispatches `error` event with Error object on the detail.
+   * @return {Promise}
+   */
   async accept() {
     if (this._importInvalid) {
       return;
     }
-    const value = await this.getConfig();
     this.loading = true;
-    this.dispatchEvent(new CustomEvent('accept', {
-      detail: value
-    }));
+    try {
+      const value = await this.getConfig();
+      await this._importCert(value);
+      this.cancel();
+    } catch (e) {
+      this.dispatchEvent(new CustomEvent('error', {
+        detail: e
+      }));
+    }
+    this.loading = false;
   }
   /* istanbul ignore next */
   _selectCertFileHandler() {
@@ -289,7 +243,7 @@ export class CertificateImport extends LitElement {
       const reader = new FileReader();
       reader.onload = (e) => { resolve(new Uint8Array(e.target.result)); };
       /* istanbul ignore next */
-      reader.onerror = (e) => { reject(new Error('Unable to read file')); };
+      reader.onerror = () => { reject(new Error('Unable to read file')); };
       reader.readAsArrayBuffer(blob);
     });
   }
@@ -299,7 +253,7 @@ export class CertificateImport extends LitElement {
       const reader = new FileReader();
       reader.onload = (e) => { resolve(e.target.result); };
       /* istanbul ignore next */
-      reader.onerror = (e) => { reject(new Error('Unable to read file')); };
+      reader.onerror = () => { reject(new Error('Unable to read file')); };
       reader.readAsText(blob);
     });
   }

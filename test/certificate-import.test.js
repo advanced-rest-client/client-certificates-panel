@@ -1,6 +1,8 @@
 import { fixture, assert, html, nextFrame } from '@open-wc/testing';
-import * as sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon';
 import * as MockInteractions from '@polymer/iron-test-helpers/mock-interactions.js';
+import { DataGenerator } from '@advanced-rest-client/arc-data-generator/arc-data-generator.js';
+import '@advanced-rest-client/arc-models/client-certificate-model.js';
 import '../certificate-import.js';
 
 describe('<certificate-import>', function() {
@@ -19,6 +21,22 @@ describe('<certificate-import>', function() {
   async function filesFixture(type) {
     const el = await fixture(html`<certificate-import
       .importType="${type}"></certificate-import>`);
+    el._page = 1;
+    const blob = new Blob(['test']);
+    blob.name = 'test';
+    el._certificateFile = blob;
+    el._keyFile = blob;
+    await nextFrame();
+    return el;
+  }
+
+  async function modelFilesFixture(type) {
+    const node = await fixture(html`<div>
+      <client-certificate-model></client-certificate-model>
+      <certificate-import
+      .importType="${type}"></certificate-import>
+      </div>`);
+    const el = node.querySelector('certificate-import');
     el._page = 1;
     const blob = new Blob(['test']);
     blob.name = 'test';
@@ -341,16 +359,33 @@ describe('<certificate-import>', function() {
       element = await basicFixture();
     });
 
-    it('dispatches cancel event when canel button is pressed', () => {
+    it('dispatches close event when canel button is pressed', () => {
       const spy = sinon.spy();
-      element.addEventListener('cancel', spy);
+      element.addEventListener('close', spy);
       const button = element.shadowRoot.querySelector('[data-action="cancel-header"]');
       MockInteractions.tap(button);
       assert.isTrue(spy.called);
     });
   });
 
-  describe('Accepting import flow', () => {
+  describe('Import flow', () => {
+    before(async () => {
+      await DataGenerator.destroyClientCertificates();
+    });
+
+    after(async () => {
+      await DataGenerator.destroyClientCertificates();
+    });
+
+    it('imports new certificate', async () => {
+      const element = await modelFilesFixture('p12');
+      await element.accept();
+      const items = await DataGenerator.getDatastoreClientCertificates();
+      const [index, data] = items;
+      assert.lengthOf(index, 1, 'Has an index item');
+      assert.lengthOf(data, 1, 'Has a data item');
+    });
+
     it('calls accept() when import is clicked', async () => {
       const element = await filesFixture('p12');
       const spy = sinon.spy(element, 'accept');
@@ -359,23 +394,11 @@ describe('<certificate-import>', function() {
       assert.isTrue(spy.called);
     });
 
-    it('dispatches accept event when valid', async () => {
-      const element = await filesFixture('p12');
-      const spy = sinon.spy();
-      element.addEventListener('accept', spy);
-      await element.accept();
-      assert.isTrue(spy.called);
-      const { detail } = spy.args[0][0];
-      assert.typeOf(detail, 'object', 'event has detail');
-      assert.equal(detail.type, 'p12', 'detail is settings object');
-    });
-
     it('ignores accept event when not valid', async () => {
       const element = await typeFixture('p12');
       const spy = sinon.spy();
       element.addEventListener('accept', spy);
-      await element.accept();
-      assert.isFalse(spy.called);
+      assert.notOk(element.loading);
     });
   });
 

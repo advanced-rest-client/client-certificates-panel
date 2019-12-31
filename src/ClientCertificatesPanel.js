@@ -13,7 +13,7 @@ the License.
 */
 import { LitElement, html } from 'lit-element';
 import { moreVert, exportVariant, deleteIcon } from '@advanced-rest-client/arc-icons/ArcIcons.js';
-import { ClientCertificatesConsumerMixin } from
+import { CcConsumerMixin } from
   '@advanced-rest-client/client-certificates-consumer-mixin/client-certificates-consumer-mixin.js';
 import '@advanced-rest-client/arc-icons/arc-icons.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
@@ -48,7 +48,7 @@ import '../certificate-details.js';
  * @memberof UiElements
  * @demo demo/index.html
  */
-export class ClientCertificatesPanel extends ClientCertificatesConsumerMixin(LitElement) {
+export class ClientCertificatesPanel extends CcConsumerMixin(LitElement) {
   static get styles() {
     return styles;
   }
@@ -244,16 +244,9 @@ export class ClientCertificatesPanel extends ClientCertificatesConsumerMixin(Lit
     this._page = 0;
   }
 
-  async _acceptImport(e) {
-    const { detail, target } = e;
-    try {
-      await this._importCert(detail);
-      target.loading = false;
-      this._page = 0;
-    } catch (e) {
-      target.loading = false;
-      this._handleException(`Cert manager: ${e.message}`);
-    }
+  async _errorImport(e) {
+    const { detail } = e;
+    this._handleException(`Cert manager: ${detail.message}`);
   }
 
   _sheetClosedHandler(e) {
@@ -460,8 +453,8 @@ export class ClientCertificatesPanel extends ClientCertificatesConsumerMixin(Lit
     const { compatibility, outlined } = this;
     return html`
     <certificate-import
-      @cancel="${this._cancelImport}"
-      @accept="${this._acceptImport}"
+      @close="${this._cancelImport}"
+      @error="${this._errorImport}"
       ?compatibility="${compatibility}"
       ?outlined="${outlined}"
     ></certificate-import>
