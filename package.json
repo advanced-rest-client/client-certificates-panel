@@ -4,6 +4,7 @@
   "version": "1.0.4",
   "license": "Apache-2.0",
   "main": "client-certificates-panel.js",
+  "module": "index.js",
   "keywords": [
     "advanced-rest-client",
     "certificates",
