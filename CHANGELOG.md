@@ -179,3 +179,31 @@
 * updated Travis configuration to connect to Sauce Labs [2f8cf13](https://github.com/advanced-rest-client/client-certificates-panel/commit/2f8cf138f60766fabf16f1a5a822511f0d680951) by Pawel
 
 
+<a name="1.0.5"></a>
+## [1.0.5](https://github.com/advanced-rest-client/client-certificates-panel/compare/1.0.3...1.0.5) (2019-12-31)
+
+### Build
+
+* bumping version [d561d87](https://github.com/advanced-rest-client/client-certificates-panel/commit/d561d87d253768cfea9de6f8a9876dfcf405f811) by Pawel Psztyc
+* bumping version [2e2fc54](https://github.com/advanced-rest-client/client-certificates-panel/commit/2e2fc54b13de3b35281a4a471b979c88570c780e) by Pawel Psztyc
+
+
+### Update
+
+* updating types [f692b99](https://github.com/advanced-rest-client/client-certificates-panel/commit/f692b99b1c0374a2fe807927bfa7ac27d7674c8f) by Pawel Psztyc
+* adding "module" to package.json file [0bb2c3e](https://github.com/advanced-rest-client/client-certificates-panel/commit/0bb2c3e7063391371ee9f3dee184739e75d74432) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [49e48ca](https://github.com/advanced-rest-client/client-certificates-panel/commit/49e48ca49223aa79d8fbc3792a0b75d19e02ba7c) by Ci agent
+* updating dependencies [c785b0b](https://github.com/advanced-rest-client/client-certificates-panel/commit/c785b0b144c21509261bc3d6268c570b86ec1c3d) by Pawel Psztyc
+* updating dependencies [842df4a](https://github.com/advanced-rest-client/client-certificates-panel/commit/842df4ac858cdf6c2e6379353cfce3da127d7c90) by Pawel Psztyc
+
+
+### Refactor
+
+* moving import implementation to import panel [751d436](https://github.com/advanced-rest-client/client-certificates-panel/commit/751d4363dbaf10d14224a7f835eac27e5f4e1a3f) by Pawel Psztyc
+
+
+### Testing
+
+* updating SL configuration [c5d78c6](https://github.com/advanced-rest-client/client-certificates-panel/commit/c5d78c624f005699173e9fd6b5df6754e496604e) by Pawel Psztyc
+
+
