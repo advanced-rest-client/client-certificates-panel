@@ -207,3 +207,27 @@
 * updating SL configuration [c5d78c6](https://github.com/advanced-rest-client/client-certificates-panel/commit/c5d78c624f005699173e9fd6b5df6754e496604e) by Pawel Psztyc
 
 
+<a name="1.0.6"></a>
+## [1.0.6](https://github.com/advanced-rest-client/client-certificates-panel/compare/1.0.4...1.0.6) (2019-12-31)
+
+### Build
+
+* bumping version [8ea3438](https://github.com/advanced-rest-client/client-certificates-panel/commit/8ea3438a494325e99313f53611b4447b977d1c07) by Pawel Psztyc
+* bumping version [d561d87](https://github.com/advanced-rest-client/client-certificates-panel/commit/d561d87d253768cfea9de6f8a9876dfcf405f811) by Pawel Psztyc
+
+
+### Update
+
+* resetting import page after cancel [e7ebd5e](https://github.com/advanced-rest-client/client-certificates-panel/commit/e7ebd5e8f5517b9d153685cda683912b522cd4b5) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [76bb950](https://github.com/advanced-rest-client/client-certificates-panel/commit/76bb95095ee1917c291276318e4a007f02192a29) by Ci agent
+* updating types [f692b99](https://github.com/advanced-rest-client/client-certificates-panel/commit/f692b99b1c0374a2fe807927bfa7ac27d7674c8f) by Pawel Psztyc
+* adding "module" to package.json file [0bb2c3e](https://github.com/advanced-rest-client/client-certificates-panel/commit/0bb2c3e7063391371ee9f3dee184739e75d74432) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [49e48ca](https://github.com/advanced-rest-client/client-certificates-panel/commit/49e48ca49223aa79d8fbc3792a0b75d19e02ba7c) by Ci agent
+* updating dependencies [c785b0b](https://github.com/advanced-rest-client/client-certificates-panel/commit/c785b0b144c21509261bc3d6268c570b86ec1c3d) by Pawel Psztyc
+
+
+### Refactor
+
+* moving import implementation to import panel [751d436](https://github.com/advanced-rest-client/client-certificates-panel/commit/751d4363dbaf10d14224a7f835eac27e5f4e1a3f) by Pawel Psztyc
+
+
