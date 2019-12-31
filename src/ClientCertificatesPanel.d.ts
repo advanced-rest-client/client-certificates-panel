@@ -14,8 +14,6 @@
 
 import {LitElement, html} from 'lit-element';
 
-import {ClientCertificatesConsumerMixin} from '@advanced-rest-client/client-certificates-consumer-mixin/client-certificates-consumer-mixin.js';
-
 export {ClientCertificatesPanel};
 
 declare namespace UiElements {
@@ -125,7 +123,7 @@ declare namespace UiElements {
      */
     _generateFileName(): String|null;
     _cancelImport(): void;
-    _acceptImport(e: any): any;
+    _errorImport(e: any): any;
     _sheetClosedHandler(e: any): void;
     _certDetailsHandler(e: any): void;
     _headerTemplate(): any;

@@ -12,7 +12,7 @@
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
-import {LitElement, html, css} from 'lit-element';
+import {LitElement, html} from 'lit-element';
 
 export {CertificateImport};
 
@@ -21,7 +21,7 @@ declare namespace UiElements {
   /**
    * A view to import a client certificate into the application.
    */
-  class CertificateImport extends LitElement {
+  class CertificateImport {
     readonly certificateFile: any;
     readonly certificatePassword: any;
     readonly keyFile: any;
@@ -62,12 +62,21 @@ declare namespace UiElements {
     _keyPassword: string|null|undefined;
     _certificateHasPassword: boolean|null|undefined;
     _keyHasPassword: boolean|null|undefined;
-    constructor();
-    render(): any;
     _importTypeHandler(e: any): void;
     _importTypeClickHandler(e: any): void;
+
+    /**
+     * Dispatches `close` custom event (non-bubbling) to
+     * inform that the parent component should hide the UI.
+     */
     cancel(): void;
-    accept(): any;
+
+    /**
+     * Accepts current user input and imports a certificate if fomr is valid.
+     * When ready it dispatches `close` event.
+     * When error occurrs it dispatches `error` event with Error object on the detail.
+     */
+    accept(): Promise<any>|null;
 
     /**
      * istanbul ignore next
@@ -100,5 +109,6 @@ declare namespace UiElements {
     _certPasswordTemplate(): any;
     _keyTemplate(): any;
     _filesFormTemplate(): any;
+    render(): any;
   }
 }
