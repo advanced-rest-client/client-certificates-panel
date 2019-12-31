@@ -146,3 +146,36 @@
 * updated Travis configuration to connect to Sauce Labs [2f8cf13](https://github.com/advanced-rest-client/client-certificates-panel/commit/2f8cf138f60766fabf16f1a5a822511f0d680951) by Pawel
 
 
+<a name="1.0.4"></a>
+## [1.0.4](https://github.com/advanced-rest-client/client-certificates-panel/compare/1.0.3...1.0.4) (2019-12-31)
+
+### Build
+
+* bumping version [2e2fc54](https://github.com/advanced-rest-client/client-certificates-panel/commit/2e2fc54b13de3b35281a4a471b979c88570c780e) by Pawel Psztyc
+* bumping version [d0cf05a](https://github.com/advanced-rest-client/client-certificates-panel/commit/d0cf05a37f203d6ca244381d92b1cd4bd4f5306e) by Pawel Psztyc
+* bumping version [aab3432](https://github.com/advanced-rest-client/client-certificates-panel/commit/aab3432174bdaed1c55002de4623ab2b1b483e32) by Pawel
+
+
+### Update
+
+* updating dependencies [c785b0b](https://github.com/advanced-rest-client/client-certificates-panel/commit/c785b0b144c21509261bc3d6268c570b86ec1c3d) by Pawel Psztyc
+* updating dependencies [842df4a](https://github.com/advanced-rest-client/client-certificates-panel/commit/842df4ac858cdf6c2e6379353cfce3da127d7c90) by Pawel Psztyc
+* ading types [712a525](https://github.com/advanced-rest-client/client-certificates-panel/commit/712a5254111d0a4c9930b5a29919cae92427bbca) by Pawel Psztyc
+* updating dependencies [6a79286](https://github.com/advanced-rest-client/client-certificates-panel/commit/6a7928615af12a50591d8f06127abf33209f6c64) by Pawel Psztyc
+* moving data handling logic to a mixin [37aac40](https://github.com/advanced-rest-client/client-certificates-panel/commit/37aac409f88acd720fbfa4707c10d134b962b659) by Pawel
+* publishing stable release [ba2a969](https://github.com/advanced-rest-client/client-certificates-panel/commit/ba2a969ffc539bf371b80d5a0cffafbfbe22f155) by Pawel
+
+
+### Features
+
+* adding compatibility support [e7b41d7](https://github.com/advanced-rest-client/client-certificates-panel/commit/e7b41d790dafe046491d4c15851e69050ddcd95a) by Pawel
+
+
+### Testing
+
+* updating SL configuration [c5d78c6](https://github.com/advanced-rest-client/client-certificates-panel/commit/c5d78c624f005699173e9fd6b5df6754e496604e) by Pawel Psztyc
+* fixing test execution for delete all flow [0b219fd](https://github.com/advanced-rest-client/client-certificates-panel/commit/0b219fda729896241069d3cc091523f143e45f1c) by Pawel
+* inclreasing timeout for t delete all test [1b8f780](https://github.com/advanced-rest-client/client-certificates-panel/commit/1b8f7802672a06fa74a7dcf52718e3c82289b1d8) by Pawel
+* updated Travis configuration to connect to Sauce Labs [2f8cf13](https://github.com/advanced-rest-client/client-certificates-panel/commit/2f8cf138f60766fabf16f1a5a822511f0d680951) by Pawel
+
+
