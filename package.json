@@ -42,48 +42,5 @@
     "@polymer/paper-toast": "^3.0.0",
     "lit-element": "^2.2.1",
     "lit-html": "^1.1.2"
-  },
-  "devDependencies": {
-    "@advanced-rest-client/arc-data-export": "^3.2.0",
-    "@advanced-rest-client/arc-data-generator": "^3.0.7",
-    "@advanced-rest-client/arc-demo-helper": "^1.0.17",
-    "@advanced-rest-client/arc-models": "^3.0.3",
-    "@advanced-rest-client/eslint-config": "^1.1.4",
-    "@advanced-rest-client/prettier-config": "^0.1.0",
-    "@advanced-rest-client/testing-karma-sl": "^1.1.0",
-    "@anypoint-web-components/anypoint-radio-button": "^0.1.4",
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
-    "@open-wc/testing": "^2.4.2",
-    "@open-wc/testing-karma": "^3.2.24",
-    "@polymer/gen-typescript-declarations": "^1.6.2",
-    "@polymer/iron-test-helpers": "^3.0.1",
-    "deepmerge": "^4.2.2",
-    "es-dev-server": "^1.34.0",
-    "husky": "^3.1.0",
-    "lint-staged": "^9.5.0",
-    "sinon": "^8.0.2"
-  },
-  "scripts": {
-    "test": "karma start --coverage",
-    "update-types": "gen-typescript-declarations --deleteExisting --outDir .",
-    "start": "es-dev-server --app-index demo/index.html --node-resolve --open --watch",
-    "start:compatibility": "es-dev-server --app-index demo/index.html --compatibility all --node-resolve --open --watch",
-    "lint:eslint": "eslint --ext .js,.html .",
-    "format:eslint": "eslint --ext .js,.html . --fix",
-    "lint:prettier": "prettier \"**/*.js\" --list-different || (echo '↑↑ these files are not prettier formatted ↑↑' && exit 1)",
-    "format:prettier": "prettier \"**/*.js\" --write",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
-    "format": "npm run format:eslint && npm run format:prettier",
-    "test:watch": "karma start --auto-watch=true --single-run=false",
-    "test:legacy": "karma start --compatibility all --coverage",
-    "test:legacy:watch": "karma start --compatibility all --auto-watch=true --single-run=false",
-    "test:sl": "karma start karma.sl.config.js --compatibility all --coverage"
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
   }
 }
